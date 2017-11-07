@@ -2,7 +2,9 @@ package ro.ubb.lftc.model.finiteautomata;
 
 import ro.ubb.lftc.model.programscanner.CustomException;
 
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -24,6 +26,23 @@ public abstract class FiniteAutomaton {
 		alphabet = new LinkedHashSet<>();
 		finalStates = new LinkedHashSet<>();
 		transitions = new LinkedHashSet<>();
+	}
+
+	public boolean isDeterministic() {
+		for (String state : states) {
+			Map<String, String> nextStates = new HashMap<>();
+			for (Transition t : transitions) {
+				if (t.getState1().equals(state)) {
+					for (String symbol : t.getSymbols()) {
+						if (nextStates.containsKey(symbol)) {
+							return false;
+						}
+						nextStates.put(symbol, t.getState2());
+					}
+				}
+			}
+		}
+		return true;
 	}
 
 	/**
@@ -58,7 +77,7 @@ public abstract class FiniteAutomaton {
 		return acceptedPrefix;
 	}
 
-	private String findNextState(String initialState, String currentSymbol) throws CustomException {
+	protected String findNextState(String initialState, String currentSymbol) throws CustomException {
 		for (Transition t : transitions) {
 			if (t.getState1().equals(initialState) && t.getSymbols().contains(currentSymbol)) {
 				return t.getState2();

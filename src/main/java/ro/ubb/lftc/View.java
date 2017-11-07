@@ -17,7 +17,7 @@ public class View {
 
 	public void printMenu() {
 		String menu = "Choose from the following: \n";
-		menu += "1.Show the finite automata.\n";
+		menu += "1.Show the finite automaton.\n";
 		menu += "2.Show states.\n";
 		menu += "3.Show final states.\n";
 		menu += "4.Show transitions\n";
@@ -26,8 +26,8 @@ public class View {
 		menu += "7.For a determinist finite automaton, determine the longest prefix of a sequence that is accepted " +
 				"by" +
 				" the automaton.\n";
-		menu += "8.Input a finite automata from keyboard.\n";
-		menu += "9.Use a finite automata from file.\n";
+		menu += "8.Input a finite automaton from keyboard.\n";
+		menu += "9.Use a finite automaton from file.\n";
 		menu += "10.Print Menu again.\n";
 		menu += "0.Exit\n";
 		System.out.println(menu);
@@ -39,7 +39,7 @@ public class View {
 			int a = keyboard.nextInt();
 			switch (a) {
 				case 1: {
-					//1.Show the finite automata.
+					//1.Show the finite automaton.
 					System.out.println(finiteAutomaton.toString());
 					continue;
 				}
@@ -66,6 +66,10 @@ public class View {
 				case 6: {
 					//6.For a determinist finite automaton, verify if a sequence is accepted by the automaton
 					String sequence = getStringFromKeyboard("Give a sequence: ");
+					if(!finiteAutomaton.isDeterministic()){
+						System.out.println("The automaton has to be deterministic.");
+						continue;
+					}
 					if (sequence.equals(finiteAutomaton.verifySequence(sequence))) {
 						System.out.println("This sequence '" + sequence + "'is accepted by the automaton");
 					} else {
@@ -73,21 +77,26 @@ public class View {
 					}
 					continue;
 				}
+
 				case 7: {
 					//7.For a determinist finite automaton, determine the longest prefix of a sequence that is
 					// accepted by the automaton.
+					if(!finiteAutomaton.isDeterministic()){
+						System.out.println("The automaton has to be deterministic.");
+						continue;
+					}
 					String sequence = getStringFromKeyboard("Give a sequence: ");
 					System.out.println("The longest accepted prefix is: '" + finiteAutomaton.verifySequence(sequence)
 							+ "' \n");
 					continue;
 				}
 				case 8: {
-					//8.Input a finite automata from keyboard.
+					//8.Input a finite automaton from keyboard.
 
 					continue;
 				}
 				case 9: {
-					//9.Use a finite automata from file.
+					//9.Use a finite automaton from file.
 					initializeAutomatonFromGivenFile();
 					continue;
 				}
@@ -119,10 +128,10 @@ public class View {
 
 	private void initializeAutomatonFromGivenFile() {
 		String file = getStringFromKeyboard("Give file name: ").trim();
-		finiteAutomaton = new FiniteAutomatonFromFile("src/main/resources/lab2" + file);
+		finiteAutomaton = new FiniteAutomatonFromFile("src/main/resources/lab2/" + file);
 		try {
 			finiteAutomaton.readAutomaton();
-			System.out.println("Read successfully the automata from the file: " + file + " !\n");
+			System.out.println("Read successfully the automaton from the file: " + file + " !\n");
 		} catch (CustomException e) {
 			System.out.println("Invalid file!");
 		}

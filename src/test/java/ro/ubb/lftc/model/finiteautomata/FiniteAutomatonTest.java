@@ -5,13 +5,15 @@ import org.junit.Test;
 import ro.ubb.lftc.model.programscanner.CustomException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class FiniteAutomatonTest {
 	private FiniteAutomaton finiteAutomaton;
 
 	@Before
 	public void setUp() throws CustomException {
-		finiteAutomaton = new FiniteAutomatonFromFile("src/main/resources/fa_ex2.txt");
+		finiteAutomaton = new FiniteAutomatonFromFile("src/test/resources/fa_test.txt");
 		finiteAutomaton.readAutomaton();
 	}
 
@@ -20,5 +22,16 @@ public class FiniteAutomatonTest {
 		assertEquals("abc", finiteAutomaton.verifySequence("abc"));
 		assertEquals("aaaabcabc", finiteAutomaton.verifySequence("aaaabcabc"));
 		assertEquals("aaabc", finiteAutomaton.verifySequence("aaabcab"));
+	}
+
+	@Test
+	public void testIsDeterministic() throws CustomException {
+		assertTrue(finiteAutomaton.isDeterministic());
+
+		FiniteAutomaton finiteAutomatonNonDeterministic = new FiniteAutomatonFromFile
+				("src/test/resources/fa_test2.txt");
+		finiteAutomatonNonDeterministic.readAutomaton();
+
+		assertFalse(finiteAutomatonNonDeterministic.isDeterministic());
 	}
 }
