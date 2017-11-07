@@ -1,4 +1,4 @@
-package ro.ubb.lftc.model;
+package ro.ubb.lftc.model.programscanner;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

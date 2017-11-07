@@ -1,4 +1,4 @@
-package ro.ubb.lftc.model;
+package ro.ubb.lftc.model.programscanner;
 
 import java.util.ArrayList;
 import java.util.List;

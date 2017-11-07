@@ -1,4 +1,4 @@
-package ro.ubb.lftc.model;
+package ro.ubb.lftc.model.programscanner;
 
 public class CustomException extends Exception {
 	public CustomException(String s) {

@@ -1,9 +1,9 @@
 package ro.ubb.lftc;
 
-import ro.ubb.lftc.model.CodingTable;
-import ro.ubb.lftc.model.CustomException;
-import ro.ubb.lftc.model.ProgramInternalForm;
-import ro.ubb.lftc.model.SymbolTable;
+import ro.ubb.lftc.model.programscanner.CodingTable;
+import ro.ubb.lftc.model.programscanner.CustomException;
+import ro.ubb.lftc.model.programscanner.ProgramInternalForm;
+import ro.ubb.lftc.model.programscanner.SymbolTable;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

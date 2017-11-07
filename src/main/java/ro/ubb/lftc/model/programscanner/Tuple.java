@@ -1,4 +1,4 @@
-package ro.ubb.lftc.model;
+package ro.ubb.lftc.model.programscanner;
 
 public class Tuple<V1, V2> {
 	V1 value1;
