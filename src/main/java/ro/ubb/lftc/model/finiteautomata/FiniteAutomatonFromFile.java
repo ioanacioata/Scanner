@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class FiniteAutomatonFromFile extends FiniteAutomaton {
 	private String fileName;
 
-	public FiniteAutomatonFromFile(String fileName)  {
+	public FiniteAutomatonFromFile(String fileName) {
 		super();
 		this.fileName = fileName;
 	}
@@ -32,7 +32,8 @@ public class FiniteAutomatonFromFile extends FiniteAutomaton {
 				if (line.equals("FINAL:")) {
 					line = br.readLine();//read next line
 					line.trim();
-					List<String> finals = Arrays.stream(line.split("\\s")).filter(s -> !s.equals("")).map(String::trim).collect(Collectors.toList());
+					List<String> finals = Arrays.stream(line.split("\\s")).filter(s -> !s.equals("")).map
+							(String::trim).collect(Collectors.toList());
 					for (String s : finals) {
 						this.finalStates.add(s);
 						this.states.add(s);
@@ -42,7 +43,8 @@ public class FiniteAutomatonFromFile extends FiniteAutomaton {
 				if (line.equals("TRANSITIONS:")) {
 					String transition;
 					while ((transition = br.readLine()) != null) {
-						List<String> trans = Arrays.stream(transition.split("[\\s+{},]")).filter(s -> !s.equals("")).map(String::trim).collect(Collectors.toList());
+						List<String> trans = Arrays.stream(transition.split("[\\s+{},]")).filter(s -> !s.equals(""))
+								.map(String::trim).collect(Collectors.toList());
 						String state1 = trans.get(0);
 						String state2 = trans.get(1);
 						Transition t = new Transition(state1, state2);

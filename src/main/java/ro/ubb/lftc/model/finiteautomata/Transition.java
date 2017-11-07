@@ -11,7 +11,7 @@ public class Transition {
 	public Transition(String state1, String state2) {
 		this.state1 = state1;
 		this.state2 = state2;
-		symbols=new LinkedHashSet<>();
+		symbols = new LinkedHashSet<>();
 	}
 
 	public String getState1() {
@@ -30,19 +30,19 @@ public class Transition {
 		this.symbols = symbols;
 	}
 
-	public void addSymbol(String symbol){
+	public void addSymbol(String symbol) {
 		symbols.add(symbol);
 	}
 
 	@Override
 	public String toString() {
 		String s;
-		s=state1+" "+state2+" {";
-		for(String i: symbols){
-			s+=i;
-			s+=" ";
+		s = state1 + " " + state2 + " {";
+		for (String i : symbols) {
+			s += i;
+			s += " ";
 		}
-		s+="}";
+		s += "}";
 		return s;
 	}
 }

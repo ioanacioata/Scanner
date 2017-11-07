@@ -13,6 +13,7 @@ public class SymbolTable {
 
 	/**
 	 * Adds a constant or an identifier in the symbol table, if it does't already exist
+	 *
 	 * @param value - String
 	 */
 	public void addValue(String value) {

@@ -1,6 +1,5 @@
 package ro.ubb.lftc;
 
-import ro.ubb.lftc.model.View;
 import ro.ubb.lftc.model.finiteautomata.FiniteAutomaton;
 import ro.ubb.lftc.model.finiteautomata.FiniteAutomatonFromFile;
 import ro.ubb.lftc.model.programscanner.CustomException;
@@ -9,13 +8,11 @@ public class App {
 	public static void main(String[] args) throws CustomException {
 		//lab1ExampleScanner();
 
-		FiniteAutomaton f= new FiniteAutomatonFromFile("src/main/resources/fa_ex1.txt");
+		FiniteAutomaton f = new FiniteAutomatonFromFile("src/main/resources/fa_ex1.txt");
 		f.readAutomaton();
 		System.out.println(f.toString());
 		View view = new View(f);
 		view.run();
-
-
 	}
 
 	private static void lab1ExampleScanner() throws CustomException {

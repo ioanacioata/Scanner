@@ -10,7 +10,7 @@ import java.util.Set;
  * Set<String> alphabet;
  * String initialState;
  * Set<String> finalStates;
- * Map<Tuple<String,String>, Set<String>> transitions;
+ * Set<Transition> transitions;
  */
 public abstract class FiniteAutomaton {
 	protected Set<String> states;
@@ -26,44 +26,45 @@ public abstract class FiniteAutomaton {
 		transitions = new LinkedHashSet<>();
 	}
 
-	public Set<String> getStates() {
-		return states;
+	/**
+	 * Verifies if the sequence is accepted by the automaton. (works for deterministic automatons)
+	 *
+	 * @param sequence - String sequence of characters
+	 * @return the longest prefix that is accepted by the automaton or the same string given if it is all correct
+	 */
+	public String verifySequence(String sequence) {
+		String acceptedPrefix = "";
+		String acceptedCompleteSequence = "";
+		String currentState = initialState;
+		String currentSymbol;
+		String nextState;
+
+		for (int i = 0; i < sequence.length(); i++) {
+			//iterate through the sequence
+			currentSymbol = String.valueOf(sequence.charAt(i));
+			acceptedCompleteSequence += currentSymbol;
+			try {
+				nextState = findNextState(currentState, currentSymbol);
+			} catch (CustomException e) {
+				//if this transition does not exist
+				return acceptedPrefix;
+			}
+			if (finalStates.contains(nextState)) {
+				acceptedPrefix += acceptedCompleteSequence;
+				acceptedCompleteSequence = "";
+			}
+			currentState = nextState;
+		}
+		return acceptedPrefix;
 	}
 
-	public void setStates(Set<String> states) {
-		this.states = states;
-	}
-
-	public Set<String> getAlphabet() {
-		return alphabet;
-	}
-
-	public void setAlphabet(Set<String> alphabet) {
-		this.alphabet = alphabet;
-	}
-
-	public String getInitialState() {
-		return initialState;
-	}
-
-	public void setInitialState(String initialState) {
-		this.initialState = initialState;
-	}
-
-	public Set<String> getFinalStates() {
-		return finalStates;
-	}
-
-	public void setFinalStates(Set<String> finalStates) {
-		this.finalStates = finalStates;
-	}
-
-	public Set<Transition> getTransitions() {
-		return transitions;
-	}
-
-	public void setTransitions(Set<Transition> transitions) {
-		this.transitions = transitions;
+	private String findNextState(String initialState, String currentSymbol) throws CustomException {
+		for (Transition t : transitions) {
+			if (t.getState1().equals(initialState) && t.getSymbols().contains(currentSymbol)) {
+				return t.getState2();
+			}
+		}
+		throw new CustomException("It does not exist another state");
 	}
 
 	public abstract void readAutomaton() throws CustomException;

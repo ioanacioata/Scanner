@@ -1,4 +1,4 @@
-package ro.ubb.lftc.model;
+package ro.ubb.lftc;
 
 import ro.ubb.lftc.model.finiteautomata.FiniteAutomaton;
 import ro.ubb.lftc.model.finiteautomata.FiniteAutomatonFromFile;
@@ -23,7 +23,8 @@ public class View {
 		menu += "4.Show transitions\n";
 		menu += "5.Show the alphabet\n";
 		menu += "6.For a determinist finite automaton, verify if a sequence is accepted by the automaton\n";
-		menu += "7.For a determinist finite automaton, determine the longest prefix of a sequence that is accepted by" +
+		menu += "7.For a determinist finite automaton, determine the longest prefix of a sequence that is accepted " +
+				"by" +
 				" the automaton.\n";
 		menu += "8.Input a finite automata from keyboard.\n";
 		menu += "9.Use a finite automata from file.\n";
@@ -64,30 +65,30 @@ public class View {
 				}
 				case 6: {
 					//6.For a determinist finite automaton, verify if a sequence is accepted by the automaton
+					String sequence = getStringFromKeyboard("Give a sequence: ");
+					if (sequence.equals(finiteAutomaton.verifySequence(sequence))) {
+						System.out.println("This sequence '" + sequence + "'is accepted by the automaton");
+					} else {
+						System.out.println("The sequence '" + sequence + "' is NOT accepted by the automaton.");
+					}
 					continue;
 				}
 				case 7: {
 					//7.For a determinist finite automaton, determine the longest prefix of a sequence that is
 					// accepted by the automaton.
+					String sequence = getStringFromKeyboard("Give a sequence: ");
+					System.out.println("The longest accepted prefix is: '" + finiteAutomaton.verifySequence(sequence)
+							+ "' \n");
 					continue;
 				}
 				case 8: {
 					//8.Input a finite automata from keyboard.
+
 					continue;
 				}
 				case 9: {
 					//9.Use a finite automata from file.
-					System.out.println("Give file name: ");
-					keyboard = new Scanner(System.in);
-					String file = keyboard.nextLine().trim();
-					finiteAutomaton = new FiniteAutomatonFromFile("src/main/resources/" + file);
-					try {
-						finiteAutomaton.readAutomaton();
-						System.out.println("Read successfully the automata from the file: " + file
-								+ " !\n");
-					} catch (CustomException e) {
-						System.out.println("Invalid file!");
-					}
+					initializeAutomatonFromGivenFile();
 					continue;
 				}
 				case 10: {
@@ -107,6 +108,23 @@ public class View {
 					continue;
 				}
 			}
+		}
+	}
+
+	private String getStringFromKeyboard(String message) {
+		System.out.println(message);
+		keyboard = new Scanner(System.in);
+		return keyboard.nextLine().trim();
+	}
+
+	private void initializeAutomatonFromGivenFile() {
+		String file = getStringFromKeyboard("Give file name: ");
+		finiteAutomaton = new FiniteAutomatonFromFile("src/main/resources/" + file);
+		try {
+			finiteAutomaton.readAutomaton();
+			System.out.println("Read successfully the automata from the file: " + file + " !\n");
+		} catch (CustomException e) {
+			System.out.println("Invalid file!");
 		}
 	}
 }

@@ -62,10 +62,11 @@ public class Scanner {
 	/**
 	 * Verifies tokens composed of a single word - simple keywords, constants, identifiers
 	 * Exits the function if an empty string is found
+	 *
 	 * @param token - the token to be checked
 	 * @throws CustomException - if it cannot identify a type for this token.
-	 * It allerts that there is a mistake in the written program from the file, that does
-	 * not respect the alphabet of this language
+	 *                         It allerts that there is a mistake in the written program from the file, that does
+	 *                         not respect the alphabet of this language
 	 */
 	private void verifySingleTokens(String token) throws CustomException {
 		//verify normal codes
@@ -104,7 +105,8 @@ public class Scanner {
 	private boolean isIdentifierToken(String s) throws CustomException {
 		if (s.chars().allMatch(Character::isLetter) && !codingTable.getCodes().containsKey(s)) {
 			if (s.length() > IDENTIFIER_NAME_LIMIT) {
-				throw new CustomException("You cannot have identifiers with name longer than " + IDENTIFIER_NAME_LIMIT);
+				throw new CustomException("You cannot have identifiers with name longer than " +
+						IDENTIFIER_NAME_LIMIT);
 			}
 			return true;
 		}
@@ -131,8 +133,9 @@ public class Scanner {
 	/**
 	 * Identifies tokens of longer length and returns the position of the next token.
 	 * (Finds the tokens : "#include <iostream>", "using namespace std", "int main()" )
+	 *
 	 * @param tokensVal - list of tokens in the program
-	 * @param i - the current position in the list of program tokens/atoms
+	 * @param i         - the current position in the list of program tokens/atoms
 	 * @return the position of the next token to analyze
 	 * @throws CustomException if it cannot add in the programInternalForm these values
 	 */
@@ -140,13 +143,15 @@ public class Scanner {
 		if (tokensVal[i].equals(INCLUDE) && tokensVal[i + 1].equals(IOSTREAM)) {
 			programInternalForm.addValues(codingTable.getValueForCode(INCLUDE + " " + IOSTREAM), null);
 			this.foundCode = Boolean.TRUE;
-			System.out.println("FOUND Special Keyword: " + INCLUDE + " " + IOSTREAM + " next word is " + tokensVal[i + 2]);
+			System.out.println("FOUND Special Keyword: " + INCLUDE + " " + IOSTREAM + " next word is " + tokensVal[i +
+					2]);
 			return i + 2;
 		}
 		if (tokensVal[i].equals(USING) && tokensVal[i + 1].equals(NAMESPACE) && tokensVal[i + 2].equals(STD)) {
 			programInternalForm.addValues(codingTable.getValueForCode(USING + " " + NAMESPACE + " " + STD), null);
 			foundCode = Boolean.TRUE;
-			System.out.println("FOUND Special Keyword: " + USING + " " + NAMESPACE + " " + STD + " next word is " + tokensVal[i + 3]);
+			System.out.println("FOUND Special Keyword: " + USING + " " + NAMESPACE + " " + STD + " next word is " +
+					tokensVal[i + 3]);
 			return i + 3;
 		}
 		if (tokensVal[i].equals(INT) && tokensVal[i + 1].equals(MAIN)) {
@@ -161,6 +166,7 @@ public class Scanner {
 
 	/**
 	 * Reads and splits the text in an array of string which were separated by space
+	 *
 	 * @param filename - the file from which it reads the program
 	 * @return an array of possible tokens
 	 * @throws CustomException in case of an IOException (cannot find or open the file)
