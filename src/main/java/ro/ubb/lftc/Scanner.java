@@ -26,7 +26,7 @@ public class Scanner {
 	private Boolean foundCode;
 
 	public Scanner() throws CustomException {
-		codingTable = new CodingTable("src/main/resources/codes.txt");
+		codingTable = new CodingTable("src/main/resources/lab1/codes.txt");
 		symbolTable = new SymbolTable();
 		programInternalForm = new ProgramInternalForm();
 	}

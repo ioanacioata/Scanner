@@ -6,11 +6,11 @@ import ro.ubb.lftc.model.programscanner.CustomException;
 
 public class App {
 	public static void main(String[] args) throws CustomException {
-		//lab1ExampleScanner();
+//		lab1ExampleScanner();
 
-		FiniteAutomaton f = new FiniteAutomatonFromFile("src/main/resources/fa_ex1.txt");
+		//Laboratory 2 - Part 1
+		FiniteAutomaton f = new FiniteAutomatonFromFile("src/main/resources/lab2/fa_ex1.txt");
 		f.readAutomaton();
-		System.out.println(f.toString());
 		View view = new View(f);
 		view.run();
 	}
@@ -18,9 +18,9 @@ public class App {
 	private static void lab1ExampleScanner() throws CustomException {
 		Scanner scanner = new Scanner();
 
-		scanner.scan("src/main/resources/circle.txt");
-//		scanner.scan("src/main/resources/sum.txt");
-//		scanner.scan("src/main/resources/divisor.txt");
+		scanner.scan("src/main/resources/lab1/circle.txt");
+		scanner.scan("src/main/resources/lab1/sum.txt");
+		scanner.scan("src/main/resources/lab1/divisor.txt");
 
 		System.out.println("\n");
 		System.out.println(scanner.getProgramInternalForm().toString());

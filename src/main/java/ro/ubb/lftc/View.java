@@ -114,12 +114,12 @@ public class View {
 	private String getStringFromKeyboard(String message) {
 		System.out.println(message);
 		keyboard = new Scanner(System.in);
-		return keyboard.nextLine().trim();
+		return keyboard.nextLine();
 	}
 
 	private void initializeAutomatonFromGivenFile() {
-		String file = getStringFromKeyboard("Give file name: ");
-		finiteAutomaton = new FiniteAutomatonFromFile("src/main/resources/" + file);
+		String file = getStringFromKeyboard("Give file name: ").trim();
+		finiteAutomaton = new FiniteAutomatonFromFile("src/main/resources/lab2" + file);
 		try {
 			finiteAutomaton.readAutomaton();
 			System.out.println("Read successfully the automata from the file: " + file + " !\n");
