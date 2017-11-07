@@ -46,15 +46,15 @@ public class FiniteAutomatonFromFile extends FiniteAutomaton {
 						List<String> trans = Arrays.stream(transition.split("[\\s+{},]")).filter(s -> !s.equals(""))
 								.map(String::trim).collect(Collectors.toList());
 						String state1 = trans.get(0);
-						String state2 = trans.get(1);
-						Transition t = new Transition(state1, state2);
+						String symbol = trans.get(1);
+						Transition t = new Transition(state1, symbol);
 						this.states.add(state1);
-						this.states.add(state2);
+						this.alphabet.add(symbol);
 						//read symbols
 						for (int i = 2; i < trans.size(); i++) {
-							String symbol = trans.get(i);
-							t.addSymbol(symbol);
-							this.alphabet.add(symbol);
+							String state2 = trans.get(i);
+							t.addSymbol(state2);
+							this.states.add(state2);
 						}
 						this.transitions.add(t);
 					}

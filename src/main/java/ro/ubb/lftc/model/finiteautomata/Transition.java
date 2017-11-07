@@ -5,40 +5,40 @@ import java.util.Set;
 
 public class Transition {
 	private String state1;
-	private String state2;
-	private Set<String> symbols;
+	private String symbol;
+	private Set<String> states2;
 
-	public Transition(String state1, String state2) {
+	public Transition(String state1, String symbol) {
 		this.state1 = state1;
-		this.state2 = state2;
-		symbols = new LinkedHashSet<>();
+		this.symbol = symbol;
+		states2 = new LinkedHashSet<>();
 	}
 
 	public String getState1() {
 		return state1;
 	}
 
-	public String getState2() {
-		return state2;
+	public String getSymbol() {
+		return symbol;
 	}
 
-	public Set<String> getSymbols() {
-		return symbols;
+	public Set<String> getStates2() {
+		return states2;
 	}
 
-	public void setSymbols(Set<String> symbols) {
-		this.symbols = symbols;
+	public void setStates2(Set<String> states2) {
+		this.states2 = states2;
 	}
 
 	public void addSymbol(String symbol) {
-		symbols.add(symbol);
+		states2.add(symbol);
 	}
 
 	@Override
 	public String toString() {
 		String s;
-		s = state1 + " " + state2 + " {";
-		for (String i : symbols) {
+		s = state1 + " " + symbol + " {";
+		for (String i : states2) {
 			s += i;
 			s += " ";
 		}

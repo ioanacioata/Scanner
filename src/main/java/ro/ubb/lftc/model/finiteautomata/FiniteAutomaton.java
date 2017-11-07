@@ -2,9 +2,7 @@ package ro.ubb.lftc.model.finiteautomata;
 
 import ro.ubb.lftc.model.programscanner.CustomException;
 
-import java.util.HashMap;
 import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -29,17 +27,9 @@ public abstract class FiniteAutomaton {
 	}
 
 	public boolean isDeterministic() {
-		for (String state : states) {
-			Map<String, String> nextStates = new HashMap<>();
-			for (Transition t : transitions) {
-				if (t.getState1().equals(state)) {
-					for (String symbol : t.getSymbols()) {
-						if (nextStates.containsKey(symbol)) {
-							return false;
-						}
-						nextStates.put(symbol, t.getState2());
-					}
-				}
+		for (Transition t : transitions){
+			if(t.getStates2().size()!=1){
+				return false;
 			}
 		}
 		return true;
@@ -79,8 +69,8 @@ public abstract class FiniteAutomaton {
 
 	protected String findNextState(String initialState, String currentSymbol) throws CustomException {
 		for (Transition t : transitions) {
-			if (t.getState1().equals(initialState) && t.getSymbols().contains(currentSymbol)) {
-				return t.getState2();
+			if (t.getState1().equals(initialState) && t.getSymbol().equals(currentSymbol)) {
+				return t.getStates2().iterator().next();
 			}
 		}
 		throw new CustomException("It does not exist another state");
