@@ -9,16 +9,16 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class FiniteAutomataFromFile extends FiniteAutomata {
+public class FiniteAutomatonFromFile extends FiniteAutomaton {
 	private String fileName;
 
-	public FiniteAutomataFromFile(String fileName)  {
+	public FiniteAutomatonFromFile(String fileName)  {
 		super();
 		this.fileName = fileName;
 	}
 
 	@Override
-	public void readAutomata() throws CustomException {
+	public void readAutomaton() throws CustomException {
 		try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
 			String line;
 			while ((line = br.readLine()) != null) {

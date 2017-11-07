@@ -12,14 +12,14 @@ import java.util.Set;
  * Set<String> finalStates;
  * Map<Tuple<String,String>, Set<String>> transitions;
  */
-public abstract class FiniteAutomata {
+public abstract class FiniteAutomaton {
 	protected Set<String> states;
 	protected Set<String> alphabet;
 	protected String initialState;
 	protected Set<String> finalStates;
 	protected Set<Transition> transitions;
 
-	public FiniteAutomata() {
+	public FiniteAutomaton() {
 		states = new LinkedHashSet<>();
 		alphabet = new LinkedHashSet<>();
 		finalStates = new LinkedHashSet<>();
@@ -66,7 +66,7 @@ public abstract class FiniteAutomata {
 		this.transitions = transitions;
 	}
 
-	public abstract void readAutomata() throws CustomException;
+	public abstract void readAutomaton() throws CustomException;
 
 	@Override
 	public String toString() {

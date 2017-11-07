@@ -1,17 +1,17 @@
 package ro.ubb.lftc.model;
 
-import ro.ubb.lftc.model.finiteautomata.FiniteAutomata;
-import ro.ubb.lftc.model.finiteautomata.FiniteAutomataFromFile;
+import ro.ubb.lftc.model.finiteautomata.FiniteAutomaton;
+import ro.ubb.lftc.model.finiteautomata.FiniteAutomatonFromFile;
 import ro.ubb.lftc.model.programscanner.CustomException;
 
 import java.util.Scanner;
 
 public class View {
-	private FiniteAutomata finiteAutomata;
+	private FiniteAutomaton finiteAutomaton;
 	private Scanner keyboard;
 
-	public View(FiniteAutomata finiteAutomata) {
-		this.finiteAutomata = finiteAutomata;
+	public View(FiniteAutomaton finiteAutomaton) {
+		this.finiteAutomaton = finiteAutomaton;
 		keyboard = new Scanner(System.in);
 	}
 
@@ -39,27 +39,27 @@ public class View {
 			switch (a) {
 				case 1: {
 					//1.Show the finite automata.
-					System.out.println(finiteAutomata.toString());
+					System.out.println(finiteAutomaton.toString());
 					continue;
 				}
 				case 2: {
 					//2.Show states
-					System.out.println(finiteAutomata.getStringStates());
+					System.out.println(finiteAutomaton.getStringStates());
 					continue;
 				}
 				case 3: {
 					//3.Show final states.
-					System.out.println(finiteAutomata.getStringFinalStates());
+					System.out.println(finiteAutomaton.getStringFinalStates());
 					continue;
 				}
 				case 4: {
 					//4.Show transitions
-					System.out.println((finiteAutomata.getStringTransitions()));
+					System.out.println((finiteAutomaton.getStringTransitions()));
 					continue;
 				}
 				case 5: {
 					//5.Show the alphabet
-					System.out.println(finiteAutomata.getStringAlphabet());
+					System.out.println(finiteAutomaton.getStringAlphabet());
 					continue;
 				}
 				case 6: {
@@ -80,9 +80,9 @@ public class View {
 					System.out.println("Give file name: ");
 					keyboard = new Scanner(System.in);
 					String file = keyboard.nextLine().trim();
-					finiteAutomata = new FiniteAutomataFromFile("src/main/resources/" + file);
+					finiteAutomaton = new FiniteAutomatonFromFile("src/main/resources/" + file);
 					try {
-						finiteAutomata.readAutomata();
+						finiteAutomaton.readAutomaton();
 						System.out.println("Read successfully the automata from the file: " + file
 								+ " !\n");
 					} catch (CustomException e) {
