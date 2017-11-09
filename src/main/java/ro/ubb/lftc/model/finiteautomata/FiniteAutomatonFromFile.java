@@ -17,6 +17,10 @@ public class FiniteAutomatonFromFile extends FiniteAutomaton {
 		this.fileName = fileName;
 	}
 
+	/**
+	 * Read the automaton from file and initializes the components of the finite automaton
+	 * @throws CustomException if an IOException is thrown
+	 */
 	@Override
 	public void readAutomaton() throws CustomException {
 		try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
