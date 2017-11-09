@@ -29,6 +29,9 @@ public class FiniteAutomatonFromFile extends FiniteAutomaton {
 				if (line.equals("INITIAL:")) {
 					line = br.readLine();//read next line
 					line.trim();
+					if(line.equals("")){
+						throw  new CustomException("The automaton has to have an initial state!");
+					}
 					this.initialState = line;
 					this.states.add(line);
 				}
@@ -38,6 +41,9 @@ public class FiniteAutomatonFromFile extends FiniteAutomaton {
 					line.trim();
 					List<String> finals = Arrays.stream(line.split("\\s")).filter(s -> !s.equals("")).map
 							(String::trim).collect(Collectors.toList());
+					if(finals.size()==0){
+						System.out.println("The automaton has to have at least a final state!");
+					}
 					for (String s : finals) {
 						this.finalStates.add(s);
 						this.states.add(s);
@@ -61,6 +67,9 @@ public class FiniteAutomatonFromFile extends FiniteAutomaton {
 							this.alphabet.add(symbol);
 						}
 						this.transitions.add(t);
+					}
+					if(transitions.size()==0){
+						throw  new CustomException("The automaton has to have transitions!");
 					}
 				}
 			}
