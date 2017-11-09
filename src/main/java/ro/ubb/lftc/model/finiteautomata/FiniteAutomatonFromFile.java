@@ -19,6 +19,7 @@ public class FiniteAutomatonFromFile extends FiniteAutomaton {
 
 	/**
 	 * Read the automaton from file and initializes the components of the finite automaton
+	 *
 	 * @throws CustomException if an IOException is thrown
 	 */
 	@Override
@@ -29,6 +30,9 @@ public class FiniteAutomatonFromFile extends FiniteAutomaton {
 				if (line.equals("INITIAL:")) {
 					line = br.readLine();//read next line
 					line.trim();
+					if (line.equals("")) {
+						throw new CustomException("You have to add an initial state!");
+					}
 					this.initialState = line;
 					this.states.add(line);
 				}
@@ -38,6 +42,9 @@ public class FiniteAutomatonFromFile extends FiniteAutomaton {
 					line.trim();
 					List<String> finals = Arrays.stream(line.split("\\s")).filter(s -> !s.equals("")).map
 							(String::trim).collect(Collectors.toList());
+					if (finals.size() == 0) {
+						System.out.println("The automaton has to have at least a final state!");
+					}
 					for (String s : finals) {
 						this.finalStates.add(s);
 						this.states.add(s);
@@ -62,6 +69,9 @@ public class FiniteAutomatonFromFile extends FiniteAutomaton {
 						}
 						this.transitions.add(t);
 					}
+				}
+				if (transitions.size() == 0) {
+					throw new CustomException("You have to input transitions!");
 				}
 			}
 		} catch (IOException e) {
