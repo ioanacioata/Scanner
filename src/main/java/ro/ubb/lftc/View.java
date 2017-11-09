@@ -38,34 +38,34 @@ public class View {
 		printMenu();
 		while (true) {
 			try {
-				int a = keyboard.nextInt();
+				String a = getStringFromKeyboard("Give command: ").trim();
 				switch (a) {
-					case 1: {
+					case "1": {
 						//1.Show the finite automaton.
 						System.out.println(finiteAutomaton.toString());
 						continue;
 					}
-					case 2: {
+					case "2": {
 						//2.Show states
 						System.out.println(finiteAutomaton.getStringStates());
 						continue;
 					}
-					case 3: {
+					case "3": {
 						//3.Show final states.
 						System.out.println(finiteAutomaton.getStringFinalStates());
 						continue;
 					}
-					case 4: {
+					case "4": {
 						//4.Show transitions
 						System.out.println((finiteAutomaton.getStringTransitions()));
 						continue;
 					}
-					case 5: {
+					case "5": {
 						//5.Show the alphabet
 						System.out.println(finiteAutomaton.getStringAlphabet());
 						continue;
 					}
-					case 6: {
+					case "6": {
 						//6.For a determinist finite automaton, verify if a sequence is accepted by the automaton
 						String sequence = getStringFromKeyboard("Give a sequence: ");
 						if (!finiteAutomaton.isDeterministic()) {
@@ -80,37 +80,38 @@ public class View {
 						continue;
 					}
 
-					case 7: {
+					case "7": {
 						//7.For a determinist finite automaton, determine the longest prefix of a sequence that is
 						// accepted by the automaton.
-						if (!finiteAutomaton.isDeterministic()) {
-							System.out.println("The automaton has to be deterministic.");
-							continue;
-						}
-						String sequence = getStringFromKeyboard("Give a sequence: ");
-						System.out.println("The longest accepted prefix is: '" + finiteAutomaton.verifySequence
-								(sequence)
+						if (finiteAutomaton.isDeterministic()) {
+							String sequence = getStringFromKeyboard("Give a sequence: ");
+							System.out.println("The longest accepted prefix is: '" + finiteAutomaton.verifySequence
+									(sequence)
 
-								+ "' \n");
+									+ "' \n");
+						} else {
+							System.out.println("The automaton has to be deterministic.");
+						}
+
 						continue;
 					}
-					case 8: {
+					case "8": {
 						//8.Input a finite automaton from keyboard.
 						finiteAutomaton = new FiniteAutomatonFromKeyboard();
 						finiteAutomaton.readAutomaton();
 						continue;
 					}
-					case 9: {
+					case "9": {
 						//9.Use a finite automaton from file.
 						initializeAutomatonFromGivenFile();
 						continue;
 					}
-					case 10: {
+					case "10": {
 						//10.Print Menu again.
 						printMenu();
 						continue;
 					}
-					case 0: {
+					case "0": {
 						//0.Exit
 						System.out.println("B-Bye!!!");
 						keyboard.close();

@@ -28,6 +28,9 @@ public abstract class FiniteAutomaton {
 		transitions = new LinkedHashSet<>();
 	}
 
+	/**
+	 * @return true if the automaton is deterministic or not
+	 */
 	public boolean isDeterministic() {
 		for (String state : states) {
 			Map<String, String> nextStates = new HashMap<>();
