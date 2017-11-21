@@ -53,7 +53,7 @@ public class FiniteAutomatonFromFile extends FiniteAutomaton {
 				if (line.equals("TRANSITIONS:")) {
 					String transition;
 					while ((transition = br.readLine()) != null) {
-						List<String> trans = Arrays.stream(transition.split("[\\s+{},]")).filter(s -> !s.equals(""))
+						List<String> trans = Arrays.stream(transition.split(" ")).filter(s -> !s.equals(""))
 								.map(String::trim).collect(Collectors.toList());
 						String state1 = trans.get(0);
 						String state2 = trans.get(1);

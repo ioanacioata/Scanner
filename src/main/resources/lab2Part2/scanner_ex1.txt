@@ -1,17 +1,17 @@
-# include < iostream >
-using namespace std ;
-int main ( ) {
-    int a , b ;
-    cin >> a ;
-    cin >> b ;
-    while ( a != b ) {
-        if ( a > b ) {
-            a = a - b ;
+#include <iostream>
+using namespace std;
+int main(){
+    int a, b;
+    cin>>a;
+    cin>>b;
+    while(a!=b){
+        if(a> b){
+            a=a-b;
         }
-        else {
-            b = b - 1273ull ;
+        else{
+            b=b-1273ull;
         }
     }
-    cout  << a ;
+    cout<<a;
     return 0 ;
 }
