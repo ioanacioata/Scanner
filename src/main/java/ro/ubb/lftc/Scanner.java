@@ -10,6 +10,8 @@ import ro.ubb.lftc.model.programscanner.SymbolTable;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Scanner {
 	private static final String CONSTANT = "constant";
@@ -129,6 +131,7 @@ public class Scanner {
 	 * @throws CustomException in case of an IOException (cannot find or open the file)
 	 */
 	private String[] getProgramFromFile(String filename) throws CustomException {
+		System.out.println("HELLO");
 		String program = "";
 		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
 			String line;
@@ -139,13 +142,31 @@ public class Scanner {
 		} catch (IOException e) {
 			throw new CustomException("Problems in reading the program :", e);
 		}
-		String[] programTokens = program.split(" ");
+		System.out.println(program);
+		String[] programTokens = getTokens(program);
 		//get rid of identation
 		for (String t : programTokens) {
 			t.replaceAll("\\s+", "");
 			t.replaceAll("\\t", "");
 		}
 		return programTokens;
+	}
+
+	private String[] getTokens(String program) {
+		List<String> tokens= new ArrayList<>();
+		while (!program.isEmpty()){
+			program=program.trim();
+			String nextToken = tokenAutomaton.getLongestPrefixForSequence(program);
+			if(!nextToken.isEmpty()){
+				tokens.add(nextToken);
+				System.out.println("Next token: "+nextToken);
+				//TODO remove from the beginning the next token
+				program=program.substring(nextToken.length());
+			}
+			program=program.trim();
+		}
+
+		return tokens.toArray(new String[0]);
 	}
 
 	public ProgramInternalForm getProgramInternalForm() {

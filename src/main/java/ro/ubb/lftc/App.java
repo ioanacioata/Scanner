@@ -9,6 +9,10 @@ public class App {
 //		lab1ExampleScanner();
 //		Lab2Part2ExampleFiniteAutomaton();
 
+		lab2Part2Scan();
+	}
+
+	private static void lab2Part2Scan() throws CustomException {
 		Scanner scanner = new Scanner();
 		scanner.scan("src/main/resources/lab2Part2/scanner_ex1.txt");
 		System.out.println("\n");
@@ -18,7 +22,8 @@ public class App {
 
 	private static void Lab2Part2ExampleFiniteAutomaton() throws CustomException {
 		//Laboratory 2 - Part 1
-		FiniteAutomaton f = new FiniteAutomatonFromFile("src/main/resources/lab2Part2/dfa_integer.txt");
+//		FiniteAutomaton f = new FiniteAutomatonFromFile("src/main/resources/lab2Part2/dfa_integer.txt");
+		FiniteAutomaton f = new FiniteAutomatonFromFile("src/main/resources/lab2Part2/dfa_token.txt");
 		//FiniteAutomaton f = new FiniteAutomatonFromFile("src/main/resources/lab2Part2/dfa_identifier.txt");
 		f.readAutomaton();
 		View view = new View(f);
