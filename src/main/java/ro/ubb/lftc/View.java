@@ -72,7 +72,7 @@ public class View {
 							System.out.println("The automaton has to be deterministic.");
 							continue;
 						}
-						if (sequence.equals(finiteAutomaton.verifySequence(sequence))) {
+						if (sequence.equals(finiteAutomaton.getLongestPrefixForSequence(sequence))) {
 							System.out.println("This sequence '" + sequence + "'is accepted by the automaton");
 						} else {
 							System.out.println("The sequence '" + sequence + "' is NOT accepted by the automaton.");
@@ -85,7 +85,7 @@ public class View {
 						// accepted by the automaton.
 						if (finiteAutomaton.isDeterministic()) {
 							String sequence = getStringFromKeyboard("Give a sequence: ");
-							System.out.println("The longest accepted prefix is: '" + finiteAutomaton.verifySequence
+							System.out.println("The longest accepted prefix is: '" + finiteAutomaton.getLongestPrefixForSequence
 									(sequence)
 
 									+ "' \n");

@@ -54,7 +54,7 @@ public abstract class FiniteAutomaton {
 	 * @param sequence - String sequence of characters
 	 * @return the longest prefix that is accepted by the automaton or the same string given if it is all correct
 	 */
-	public String verifySequence(String sequence) {
+	public String getLongestPrefixForSequence(String sequence) {
 		String acceptedPrefix = "";
 		String acceptedCompleteSequence = "";
 		String currentState = initialState;
@@ -78,6 +78,10 @@ public abstract class FiniteAutomaton {
 			currentState = nextState;
 		}
 		return acceptedPrefix;
+	}
+
+	public boolean isAccepted(String s){
+		return s.equals(this.getLongestPrefixForSequence(s));
 	}
 
 	protected String findNextState(String initialState, String currentSymbol) throws CustomException {

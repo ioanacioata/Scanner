@@ -19,9 +19,9 @@ public class FiniteAutomatonTest {
 
 	@Test
 	public void testVerifySequence() {
-		assertEquals("abc", finiteAutomaton.verifySequence("abc"));
-		assertEquals("aaaabcabc", finiteAutomaton.verifySequence("aaaabcabc"));
-		assertEquals("aaabc", finiteAutomaton.verifySequence("aaabcab"));
+		assertEquals("abc", finiteAutomaton.getLongestPrefixForSequence("abc"));
+		assertEquals("aaaabcabc", finiteAutomaton.getLongestPrefixForSequence("aaaabcabc"));
+		assertEquals("aaabc", finiteAutomaton.getLongestPrefixForSequence("aaabcab"));
 	}
 
 	@Test

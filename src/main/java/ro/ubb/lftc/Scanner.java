@@ -1,5 +1,7 @@
 package ro.ubb.lftc;
 
+import ro.ubb.lftc.model.finiteautomata.FiniteAutomaton;
+import ro.ubb.lftc.model.finiteautomata.FiniteAutomatonFromFile;
 import ro.ubb.lftc.model.programscanner.CodingTable;
 import ro.ubb.lftc.model.programscanner.CustomException;
 import ro.ubb.lftc.model.programscanner.ProgramInternalForm;
@@ -10,25 +12,26 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class Scanner {
-	public static final String INCLUDE = "#include";
-	public static final String IOSTREAM = "<iostream>";
-	public static final String USING = "using";
-	public static final String NAMESPACE = "namespace";
-	public static final String STD = "std";
-	public static final String INT = "int";
-	public static final String MAIN = "main()";
-	public static final String CONSTANT = "constant";
-	public static final String IDENTIFIER = "identifier";
-	public static final int IDENTIFIER_NAME_LIMIT = 8;
+	private static final String CONSTANT = "constant";
+	private static final String IDENTIFIER = "identifier";
 	private ProgramInternalForm programInternalForm;
 	private SymbolTable symbolTable;
 	private CodingTable codingTable;
-	private Boolean foundCode;
+	private FiniteAutomaton integerFiniteAutomaton;
+	private FiniteAutomaton identifierFiniteAutomaton;
+	private FiniteAutomaton tokenAutomaton;
 
 	public Scanner() throws CustomException {
 		codingTable = new CodingTable("src/main/resources/lab1/codes.txt");
 		symbolTable = new SymbolTable();
 		programInternalForm = new ProgramInternalForm();
+		//read the automatons
+		integerFiniteAutomaton = new FiniteAutomatonFromFile("src/main/resources/lab2Part2/dfa_integer.txt");
+		integerFiniteAutomaton.readAutomaton();
+		identifierFiniteAutomaton = new FiniteAutomatonFromFile("src/main/resources/lab2Part2/dfa_identifier.txt");
+		identifierFiniteAutomaton.readAutomaton();
+		tokenAutomaton = new FiniteAutomatonFromFile("src/main/resources/lab2Part2/dfa_token.txt");
+		tokenAutomaton.readAutomaton();
 	}
 
 	/**
@@ -40,22 +43,29 @@ public class Scanner {
 	 *                         if there is a IOException thrown when trying to read the file
 	 */
 	public void scan(String filename) throws CustomException {
+		verifyAutomatons();
 		symbolTable = new SymbolTable();
 		programInternalForm = new ProgramInternalForm();
 
 		String[] tokensVal = getProgramFromFile(filename);
 
-		foundCode = false;
 		int i = 0;
 		while (i < tokensVal.length) {
+			verifySingleTokens(tokensVal[i]);
+			i++;
+		}
+	}
 
-			i = verifyCodesWithMoreWords(tokensVal, i);
-			if (foundCode == Boolean.FALSE) {
-				verifySingleTokens(tokensVal[i]);
-				i++;
-			}
+	private void verifyAutomatons() throws CustomException {
+		if(!identifierFiniteAutomaton.isDeterministic()){
+			throw new CustomException("The finite automaton for IDENTIFIER is not deterministic, It would cause errors!");
 
-			foundCode = Boolean.FALSE;
+		}
+		if(!integerFiniteAutomaton.isDeterministic()){
+			throw new CustomException("The finite automaton for INTEGER is not deterministic, It would cause errors!");
+		}
+		if(!tokenAutomaton.isDeterministic()){
+			throw new CustomException("The finite automaton for TOKENS is not deterministic, It would cause errors!");
 		}
 	}
 
@@ -76,92 +86,39 @@ public class Scanner {
 		if (codingTable.hasCode(token)) {
 			System.out.println("FOUND Keyword: " + token);
 			programInternalForm.addValues(codingTable.getValueForCode(token), null);
-			foundCode = Boolean.TRUE;
+			return;
 		}
 		if (isConstantToken(token)) {
-			foundCode = Boolean.TRUE;
 			System.out.println("FOUND Constant: " + token);
 			symbolTable.addValue(token);
 			programInternalForm.addValues(codingTable.getValueForCode(CONSTANT), symbolTable.getPosition(token));
+			return;
 		}
 		if (isIdentifierToken(token)) {
 			System.out.println("FOUND Identifier: " + token);
-			foundCode = Boolean.TRUE;
 			symbolTable.addValue(token);
 			programInternalForm.addValues(codingTable.getValueForCode(IDENTIFIER), symbolTable.getPosition(token));
+			return;
 		}
 
-		if (foundCode.equals(Boolean.FALSE)) {
-			throw new CustomException("Couldn't find a category for string '" + token + "'");
-		}
+		throw new CustomException("Couldn't find a category for string '" + token + "'");
 	}
 
 	/**
 	 * @param s - the string to verify
 	 * @return true if is an identifier (contains only letters and is not a keyword),
 	 * false otherwise
-	 * @throws CustomException if the string s is an identifier longer than IDENTIFIER_NAME_LIMIT (=8)
 	 */
-	private boolean isIdentifierToken(String s) throws CustomException {
-		if (s.chars().allMatch(Character::isLetter) && !codingTable.getCodes().containsKey(s)) {
-			if (s.length() > IDENTIFIER_NAME_LIMIT) {
-				throw new CustomException("You cannot have identifiers with name longer than " +
-						IDENTIFIER_NAME_LIMIT);
-			}
-			return true;
-		}
-		return false;
+	private boolean isIdentifierToken(String s){
+		return identifierFiniteAutomaton.isAccepted(s);
 	}
 
 	/**
 	 * @param s - the string to verify
 	 * @return true if s is a valid number, false otherwise
-	 * Examples unvalid numbers: -0 , 01, -01.10, 2.0, 2000.000020
 	 */
 	private boolean isConstantToken(String s) {
-		if (s.matches("0") || s.matches("-0.[0-9]*[1-9]")) { //just digits
-//			System.out.println("TRUE - just 0 or -0.other numbers ");
-			return true;
-		}
-		if (s.matches("^-?[1-9][0-9]*(.[0-9]*[1-9])?")) { //just digits
-//			System.out.println("TRUE - more digits");
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Identifies tokens of longer length and returns the position of the next token.
-	 * (Finds the tokens : "#include <iostream>", "using namespace std", "int main()" )
-	 *
-	 * @param tokensVal - list of tokens in the program
-	 * @param i         - the current position in the list of program tokens/atoms
-	 * @return the position of the next token to analyze
-	 * @throws CustomException if it cannot add in the programInternalForm these values
-	 */
-	private int verifyCodesWithMoreWords(String[] tokensVal, int i) throws CustomException {
-		if (tokensVal[i].equals(INCLUDE) && tokensVal[i + 1].equals(IOSTREAM)) {
-			programInternalForm.addValues(codingTable.getValueForCode(INCLUDE + " " + IOSTREAM), null);
-			this.foundCode = Boolean.TRUE;
-			System.out.println("FOUND Special Keyword: " + INCLUDE + " " + IOSTREAM + " next word is " + tokensVal[i +
-					2]);
-			return i + 2;
-		}
-		if (tokensVal[i].equals(USING) && tokensVal[i + 1].equals(NAMESPACE) && tokensVal[i + 2].equals(STD)) {
-			programInternalForm.addValues(codingTable.getValueForCode(USING + " " + NAMESPACE + " " + STD), null);
-			foundCode = Boolean.TRUE;
-			System.out.println("FOUND Special Keyword: " + USING + " " + NAMESPACE + " " + STD + " next word is " +
-					tokensVal[i + 3]);
-			return i + 3;
-		}
-		if (tokensVal[i].equals(INT) && tokensVal[i + 1].equals(MAIN)) {
-			programInternalForm.addValues(codingTable.getValueForCode(INT + " " + MAIN), null);
-			foundCode = Boolean.TRUE;
-			System.out.println("FOUND Special Keyword: " + INT + " " + MAIN + " next word is " + tokensVal[i + 2]);
-			return i + 2;
-		}
-
-		return i;
+		return integerFiniteAutomaton.isAccepted(s);
 	}
 
 	/**

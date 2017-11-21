@@ -2,20 +2,22 @@
 1 constant
 2 int
 3 float
-4 int
-5 const
-6 #include <iostream>
-7 using namespace std
-8 int main()
-9 cin
-10 cout
-11 ;
-12 (
-13 )
-14 {
-15 }
-16 <<
-17 >>
+4 const
+5 include
+6 using
+7 namespace
+8 std
+9 iostream
+10 cin
+11 cout
+12 ;
+13 #
+14 (
+15 )
+16 {
+17 }
+18 <<
+19 >>
 18 =
 19 ==
 20 !=
@@ -33,3 +35,4 @@
 32 if
 33 else
 34 while
+35 main
