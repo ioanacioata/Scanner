@@ -27,3 +27,5 @@ q11 q5 0 1
 q5 q5 0 1
 q5 q6 u U
 q5 q7 l L
+q2 q7 l L
+q2 q6 u U

@@ -6,16 +6,21 @@ import ro.ubb.lftc.model.programscanner.CustomException;
 
 public class App {
 	public static void main(String[] args) throws CustomException {
-//		lab1ExampleScanner();
-//		Lab2Part2ExampleFiniteAutomaton();
+		try {
+//			lab1ExampleScanner();
+//			Lab2Part2ExampleFiniteAutomaton();
 
-		lab2Part2Scan();
+			lab2Part2Scan();
+		}catch (CustomException e){
+			System.out.println("EXCEPTION: "+e.getMessage());
+		}
 	}
 
 	private static void lab2Part2Scan() throws CustomException {
 		Scanner scanner = new Scanner();
-		scanner.scan("src/main/resources/lab2Part2/scanner_ex1.txt");
-		System.out.println("\n");
+//		scanner.scan("src/main/resources/lab2Part2/scanner_ex1.txt");
+		scanner.scan("src/main/resources/lab2Part2/scanner_ex.txt");
+		System.out.println("\nRESULTS:");
 		System.out.println(scanner.getProgramInternalForm().toString());
 		System.out.println(scanner.getSymbolTable().toString());
 	}

@@ -20,8 +20,9 @@ public class Scanner {
 	private SymbolTable symbolTable;
 	private CodingTable codingTable;
 	private FiniteAutomaton integerFiniteAutomaton;
+	private FiniteAutomaton floatFiniteAutomaton;
 	private FiniteAutomaton identifierFiniteAutomaton;
-	private FiniteAutomaton tokenAutomaton;
+	private FiniteAutomaton tokenFiniteAutomaton;
 
 	public Scanner() throws CustomException {
 		codingTable = new CodingTable("src/main/resources/lab1/codes.txt");
@@ -30,10 +31,12 @@ public class Scanner {
 		//read the automatons
 		integerFiniteAutomaton = new FiniteAutomatonFromFile("src/main/resources/lab2Part2/dfa_integer.txt");
 		integerFiniteAutomaton.readAutomaton();
+		floatFiniteAutomaton = new FiniteAutomatonFromFile("src/main/resources/lab2Part2/dfa_float.txt");
+		floatFiniteAutomaton.readAutomaton();
 		identifierFiniteAutomaton = new FiniteAutomatonFromFile("src/main/resources/lab2Part2/dfa_identifier.txt");
 		identifierFiniteAutomaton.readAutomaton();
-		tokenAutomaton = new FiniteAutomatonFromFile("src/main/resources/lab2Part2/dfa_token.txt");
-		tokenAutomaton.readAutomaton();
+		tokenFiniteAutomaton = new FiniteAutomatonFromFile("src/main/resources/lab2Part2/dfa_token.txt");
+		tokenFiniteAutomaton.readAutomaton();
 	}
 
 	/**
@@ -46,6 +49,7 @@ public class Scanner {
 	 */
 	public void scan(String filename) throws CustomException {
 		verifyAutomatons();
+		System.out.println("\nSCANNING THE PROGRAM: ");
 		symbolTable = new SymbolTable();
 		programInternalForm = new ProgramInternalForm();
 
@@ -53,21 +57,24 @@ public class Scanner {
 
 		int i = 0;
 		while (i < tokensVal.length) {
-			verifySingleTokens(tokensVal[i]);
+			verifyToken(tokensVal[i]);
 			i++;
 		}
 	}
 
 	private void verifyAutomatons() throws CustomException {
-		if(!identifierFiniteAutomaton.isDeterministic()){
-			throw new CustomException("The finite automaton for IDENTIFIER is not deterministic, It would cause errors!");
-
+		if (!identifierFiniteAutomaton.isDeterministic()) {
+			throw new CustomException("The finite automaton for IDENTIFIER is not deterministic, It would cause " +
+					"errors!");
 		}
-		if(!integerFiniteAutomaton.isDeterministic()){
+		if (!integerFiniteAutomaton.isDeterministic()) {
 			throw new CustomException("The finite automaton for INTEGER is not deterministic, It would cause errors!");
 		}
-		if(!tokenAutomaton.isDeterministic()){
+		if (!tokenFiniteAutomaton.isDeterministic()) {
 			throw new CustomException("The finite automaton for TOKENS is not deterministic, It would cause errors!");
+		}
+		if (!floatFiniteAutomaton.isDeterministic()) {
+			throw new CustomException("The finite automaton for FLOAT is not deterministic, It would cause errors!");
 		}
 	}
 
@@ -80,47 +87,51 @@ public class Scanner {
 	 *                         It allerts that there is a mistake in the written program from the file, that does
 	 *                         not respect the alphabet of this language
 	 */
-	private void verifySingleTokens(String token) throws CustomException {
-		//verify normal codes
-		if (token.equals("")) {
-			return;
-		}
-		if (codingTable.hasCode(token)) {
-			System.out.println("FOUND Keyword: " + token);
-			programInternalForm.addValues(codingTable.getValueForCode(token), null);
-			return;
-		}
-		if (isConstantToken(token)) {
-			System.out.println("FOUND Constant: " + token);
-			symbolTable.addValue(token);
-			programInternalForm.addValues(codingTable.getValueForCode(CONSTANT), symbolTable.getPosition(token));
-			return;
-		}
-		if (isIdentifierToken(token)) {
-			System.out.println("FOUND Identifier: " + token);
-			symbolTable.addValue(token);
-			programInternalForm.addValues(codingTable.getValueForCode(IDENTIFIER), symbolTable.getPosition(token));
-			return;
-		}
+	private void verifyToken(String token) throws CustomException {
+//		System.out.println("TOKEN: " + token);
+		String nextToken;
+		while (!token.isEmpty()) {
+			boolean found = false;
+			if (codingTable.hasCode(token)) {
+				System.out.println("FOUND Keyword: " + token);
+				programInternalForm.addValues(codingTable.getValueForCode(token), null);
+				return;
+			}
+			nextToken = identifierFiniteAutomaton.getLongestPrefixForSequence(token);
+			if (!nextToken.isEmpty()) {
+				found = true;
+				System.out.println("FOUND Identifier: " + token);
+				symbolTable.addValue(nextToken);
+				programInternalForm.addValues(codingTable.getValueForCode(IDENTIFIER), symbolTable.getPosition
+						(nextToken));
+				//remove this part from the token
+				token = token.substring(nextToken.length());
+			}
+			nextToken = floatFiniteAutomaton.getLongestPrefixForSequence(token);
+			if (!nextToken.isEmpty()) {
+				found = true;
+				System.out.println("FOUND Constant -  FLOAT: " + nextToken);
+				symbolTable.addValue(nextToken);
+				programInternalForm.addValues(codingTable.getValueForCode(CONSTANT), symbolTable.getPosition
+						(nextToken));
+				//remove this part from the token
+				token = token.substring(nextToken.length());
+			}
+			nextToken = integerFiniteAutomaton.getLongestPrefixForSequence(token);
+			if (!nextToken.isEmpty()) {
+				found = true;
+				System.out.println("FOUND Constant -  INTEGER: " + nextToken);
+				symbolTable.addValue(nextToken);
+				programInternalForm.addValues(codingTable.getValueForCode(CONSTANT), symbolTable.getPosition
+						(nextToken));
+				//remove this part from the token
+				token = token.substring(nextToken.length());
+			}
 
-		throw new CustomException("Couldn't find a category for string '" + token + "'");
-	}
-
-	/**
-	 * @param s - the string to verify
-	 * @return true if is an identifier (contains only letters and is not a keyword),
-	 * false otherwise
-	 */
-	private boolean isIdentifierToken(String s){
-		return identifierFiniteAutomaton.isAccepted(s);
-	}
-
-	/**
-	 * @param s - the string to verify
-	 * @return true if s is a valid number, false otherwise
-	 */
-	private boolean isConstantToken(String s) {
-		return integerFiniteAutomaton.isAccepted(s);
+			if (!found) {
+				throw new CustomException("Couldn't find a category for string '" + token + "'");
+			}
+		}
 	}
 
 	/**
@@ -131,41 +142,44 @@ public class Scanner {
 	 * @throws CustomException in case of an IOException (cannot find or open the file)
 	 */
 	private String[] getProgramFromFile(String filename) throws CustomException {
-		System.out.println("HELLO");
-		String program = "";
+		StringBuilder program = new StringBuilder();
 		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
 			String line;
 			while ((line = br.readLine()) != null) {
-				program += line;
-				program += " ";
+				program.append(line);
+				program.append(" ");
 			}
 		} catch (IOException e) {
 			throw new CustomException("Problems in reading the program :", e);
 		}
 		System.out.println(program);
-		String[] programTokens = getTokens(program);
-		//get rid of identation
-		for (String t : programTokens) {
-			t.replaceAll("\\s+", "");
-			t.replaceAll("\\t", "");
-		}
-		return programTokens;
+		return getTokens(program.toString());
 	}
 
-	private String[] getTokens(String program) {
-		List<String> tokens= new ArrayList<>();
-		while (!program.isEmpty()){
-			program=program.trim();
-			String nextToken = tokenAutomaton.getLongestPrefixForSequence(program);
-			if(!nextToken.isEmpty()){
+	/**
+	 * @param program - String (the program lines read from the file)
+	 * @return an array of strings representing possible tokens ( a token can be a sequence of letters and/or digits,
+	 * or the special signs from the coding table)
+	 * @throws CustomException - if cannot identify a token (that token is not accepted by the defined automaton)
+	 */
+	private String[] getTokens(String program) throws CustomException {
+		System.out.println("READING FROM FILE: ");
+		List<String> tokens = new ArrayList<>();
+		while (!program.isEmpty()) {
+			program = program.trim();
+			String nextToken = tokenFiniteAutomaton.getLongestPrefixForSequence(program);
+			//There should not be empty tokens, otherwise there is an error
+			if (!nextToken.isEmpty()) {
 				tokens.add(nextToken);
-				System.out.println("Next token: "+nextToken);
-				//TODO remove from the beginning the next token
-				program=program.substring(nextToken.length());
+				System.out.println("Next token: '" + nextToken + "'");
+				//remove from the beginning the next token
+				program = program.substring(nextToken.length());
+			} else {
+				throw new CustomException("Error reading the program from here:" + program);
 			}
-			program=program.trim();
+			//delete all spaces
+			program = program.trim();
 		}
-
 		return tokens.toArray(new String[0]);
 	}
 

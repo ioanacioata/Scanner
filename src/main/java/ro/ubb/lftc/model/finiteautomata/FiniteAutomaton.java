@@ -38,6 +38,7 @@ public abstract class FiniteAutomaton {
 				if (t.getState1().equals(state)) {
 					for (String symbol : t.getSymbols()) {
 						if (nextStates.containsKey(symbol)) {
+							System.out.println("ERR: key symbol : "+ symbol + " state "+state +" STATE 2 "+t.getState2());
 							return false;
 						}
 						nextStates.put(symbol, t.getState2());
