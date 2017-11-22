@@ -13,6 +13,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Scanner class uses all the other classes. In the constructor it initializes the CodingTable and creates the
+ * symbolTable and the programInternalForm and the finite automatons defined.
+ */
 public class Scanner {
 	private static final String CONSTANT = "constant";
 	private static final String IDENTIFIER = "identifier";
@@ -62,6 +66,9 @@ public class Scanner {
 		}
 	}
 
+	/**
+	 * @throws CustomException - if the automatons used by this program are not deterministic
+	 */
 	private void verifyAutomatons() throws CustomException {
 		if (!identifierFiniteAutomaton.isDeterministic()) {
 			throw new CustomException("The finite automaton for IDENTIFIER is not deterministic, It would cause " +
@@ -79,7 +86,7 @@ public class Scanner {
 	}
 
 	/**
-	 * Verifies tokens composed of a single word - simple keywords, constants, identifiers
+	 * Verifies tokens composed of a single word - simple keywords, constants(float or integer), identifiers
 	 * Exits the function if an empty string is found
 	 *
 	 * @param token - the token to be checked
@@ -91,12 +98,14 @@ public class Scanner {
 //		System.out.println("TOKEN: " + token);
 		String nextToken;
 		while (!token.isEmpty()) {
+			//look for keywords
 			boolean found = false;
 			if (codingTable.hasCode(token)) {
 				System.out.println("FOUND Keyword: " + token);
 				programInternalForm.addValues(codingTable.getValueForCode(token), null);
 				return;
 			}
+			//look for identifiers
 			nextToken = identifierFiniteAutomaton.getLongestPrefixForSequence(token);
 			if (!nextToken.isEmpty()) {
 				found = true;
@@ -107,6 +116,7 @@ public class Scanner {
 				//remove this part from the token
 				token = token.substring(nextToken.length());
 			}
+			//look for constants - FLOAT
 			nextToken = floatFiniteAutomaton.getLongestPrefixForSequence(token);
 			if (!nextToken.isEmpty()) {
 				found = true;
@@ -117,6 +127,7 @@ public class Scanner {
 				//remove this part from the token
 				token = token.substring(nextToken.length());
 			}
+			//look for constants - INTEGER
 			nextToken = integerFiniteAutomaton.getLongestPrefixForSequence(token);
 			if (!nextToken.isEmpty()) {
 				found = true;

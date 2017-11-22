@@ -3,6 +3,10 @@ package ro.ubb.lftc.model.programscanner;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * ProgramInternalForm class contains a list of tuples, representing the atoms of the program, more specifically
+ * their code, associated with their position in the symbol table, in the case of constants and identifiers.
+ */
 public class ProgramInternalForm {
 	private static final int CODE_FOR_IDENTIFIER = 1;
 	private static final int CODE_FOR_CONSTANT = 0;

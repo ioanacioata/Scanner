@@ -3,6 +3,9 @@ package ro.ubb.lftc.model.finiteautomata;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+/**
+ * Transition of an automaton: contains state1, state2 and the transition symbol
+ */
 public class Transition {
 	private String state1;
 	private String state2;
@@ -24,10 +27,6 @@ public class Transition {
 
 	public Set<String> getSymbols() {
 		return symbols;
-	}
-
-	public void setSymbols(Set<String> symbols) {
-		this.symbols = symbols;
 	}
 
 	public void addSymbol(String symbol) {

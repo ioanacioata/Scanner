@@ -7,6 +7,9 @@ import ro.ubb.lftc.model.programscanner.CustomException;
 
 import java.util.Scanner;
 
+/**
+ * This class is provide a menu with the options for the automatons
+ */
 public class View {
 	private FiniteAutomaton finiteAutomaton;
 	private Scanner keyboard;

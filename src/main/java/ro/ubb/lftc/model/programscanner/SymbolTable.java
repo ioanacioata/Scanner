@@ -2,6 +2,11 @@ package ro.ubb.lftc.model.programscanner;
 
 import java.util.Hashtable;
 
+/**
+ * SymbolTable class contains a hashtable that holds constants and identifiers. The key of the hashtable is the id of
+ * the identifier or the constant (numeric values) and their position in the code. These identifiers and constants
+ * are unique.
+ */
 public class SymbolTable {
 	int currentPosition;
 	Hashtable<String, Integer> table;

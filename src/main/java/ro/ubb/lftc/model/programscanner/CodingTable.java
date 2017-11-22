@@ -6,6 +6,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * CodingTable class contains a map with the numeric codes of the possible keywords in the program. This map is
+ * filled in the constructor of the class, it calls a private method that reads from a given file the data.
+ * <p>
+ * Exceptions : The constructor may throw an CustomException  if there is an IO Exception thrown, related to reading
+ * the file.
+ */
 public class CodingTable {
 	String filename;
 	Map<String, Integer> codes;

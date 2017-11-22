@@ -4,6 +4,12 @@ import ro.ubb.lftc.model.finiteautomata.FiniteAutomaton;
 import ro.ubb.lftc.model.finiteautomata.FiniteAutomatonFromFile;
 import ro.ubb.lftc.model.programscanner.CustomException;
 
+/**
+ * Homework constraint:
+ * 1. Identifiers: a. length at most 8 characters
+ * 2. Symbol Table: a. unique for identifiers and constants
+ * 3. Symbol Table Organization: c. hashing table
+ */
 public class App {
 	public static void main(String[] args) throws CustomException {
 		try {
@@ -11,8 +17,8 @@ public class App {
 //			Lab2Part2ExampleFiniteAutomaton();
 
 			lab2Part2Scan();
-		}catch (CustomException e){
-			System.out.println("EXCEPTION: "+e.getMessage());
+		} catch (CustomException e) {
+			System.out.println("EXCEPTION: " + e.getMessage());
 		}
 	}
 
