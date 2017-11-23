@@ -30,3 +30,4 @@ q11 a12 0 1 2 3 4 5 6 7 8 9 a b c d e f A B C D E F
 q12 a12 0 1 2 3 4 5 6 7 8 9 a b c d e f A B C D E F
 q13 a12 0 1 2 3 4 5 6 7 8 9 a b c d e f A B C D E F
 q9 q13 .
+q3 q3 0 1 2 3 4 5 6 7 8 9

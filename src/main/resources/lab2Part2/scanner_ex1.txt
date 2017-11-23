@@ -9,7 +9,7 @@ int main(){
             a=a-b;
         }
         else{
-            b=b-1273ull;
+            b=1273lul;
         }
     }
     cout<<a;
